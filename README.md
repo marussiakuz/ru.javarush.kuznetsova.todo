@@ -13,6 +13,16 @@ client implementation on Bootstrap (css/js), jQuery, AJAX, Thymeleaf.
 <br/>:white_check_mark: user administration - add/delete/edit, getting all users
 <br/>:white_check_mark: the user has access to a personal account where he can view information about his account, create/delete/edit tasks, set a deadline for completing tasks, and receive a list of his tasks
 
+```
+After running the project, get to the admin page: 
+login: admin@gmail.com 
+password: admin 
+```
+```
+get access to the user's page: 
+login: user@gmail.com 
+password: user
+```
 <hr>
 Admin panel (get all users):
 
