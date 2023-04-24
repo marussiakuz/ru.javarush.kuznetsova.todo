@@ -29,6 +29,7 @@ Personal account (getting private account info):
 
 ## what is planned to be added to the project in the near future:
 - [ ] add logging and testing
+- [ ] add error handler and error pages
 - [ ] add Dockerfile and docker-compose.yml
 - [ ] add two more modules - mvc and jdbc implementations
 - [ ] getting a sorted and filtered list of tasks by selected parameters
