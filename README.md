@@ -13,16 +13,27 @@ client implementation on Bootstrap (css/js), jQuery, AJAX, Thymeleaf.
 <br/>:white_check_mark: user administration - add/delete/edit, getting all users
 <br/>:white_check_mark: the user has access to a personal account where he can view information about his account, create/delete/edit tasks, set a deadline for completing tasks, and receive a list of his tasks
 
+<hr>
+
+## ***Instructions for running the project:***
 ```
-After running the project, get to the admin page: 
+1. Fork a repo
+
+2. Spin containers:
+   docker-compose up -d --build
+   
+3. After running the project, get to the admin page: 
 login: admin@gmail.com 
-password: admin 
-```
-```
-get access to the user's page: 
+password: admin    
+
+   Or
+   
+   get access to the user's page: 
 login: user@gmail.com 
 password: user
+   
 ```
+
 <hr>
 Admin panel (get all users):
 
@@ -40,7 +51,7 @@ Personal account (getting private account info):
 ## what is planned to be added to the project in the near future:
 - [ ] add logging and testing
 - [ ] add error handler and error pages
-- [ ] add Dockerfile and docker-compose.yml
+- [X] add Dockerfile and docker-compose.yml
 - [ ] add two more modules - mvc and jdbc implementations
 - [ ] getting a sorted and filtered list of tasks by selected parameters
 - [ ] add a manager role to be able to assign tasks and track their completion
