@@ -1,0 +1,51 @@
+insert into roles (role_name) values ('ROLE_ADMIN');
+insert into roles (role_name) values ('ROLE_USER');
+
+insert into users (age, email, user_name, last_name, user_password) values (30, 'admin@gmail.com', 'admin', 'adminskii', '$2a$10$7mbnp8pNOBQFngPN/CdDT.H/eMJ4zfjorglwChXNilCtOF0M14Es6');
+insert into users (age, email, user_name, last_name, user_password) values (50, 'user@gmail.com', 'user', 'userevich', '$2a$10$8mOVqDFoLGqE9wHd/FnrV.fF1i7eQb9txn2pLkRMbmtLrsDbTXysu');
+
+insert into users_roles (user_id, role_id) values (1, 1);
+insert into users_roles (user_id, role_id) values (1, 2);
+insert into users_roles (user_id, role_id) values (2, 2);
+
+insert into tasks (title, description, deadline, status, user_id) values ('task one (Admin''s task)', 'some description for task one', '2023-04-23', 'DONE', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task two (Admin''s task)', 'some description for task two', '2023-04-23', 'DONE', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task three (Admin''s task)', 'some description for task three', '2023-04-24', 'IN_PROGRESS', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task four (Admin''s task)', 'some description for task four', '2023-04-25', 'DONE', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task five (Admin''s task)', 'some description for task five', '2023-04-20', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task six (Admin''s task)', 'some description for task six', '2023-04-20', 'IN_PROGRESS', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task seven (Admin''s task)', 'some description for task seven', '2023-04-20', 'IN_PROGRESS', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task eight (Admin''s task)', 'some description for task eight', '2023-04-27', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task nine (Admin''s task)', 'some description for task nine', '2023-05-01', 'IN_PROGRESS', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task ten (Admin''s task)', 'some description for task ten', '2023-05-03', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task eleven (Admin''s task)', 'some description for task eleven', '2023-05-05', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task twelve (Admin''s task)', 'some description for task twelve', '2023-05-07', 'IN_PROGRESS', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task thirteen (Admin''s task)', 'some description for task thirteen', '2023-05-09', 'PAUSED', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task fourteen (Admin''s task)', 'some description for task fourteen', '2023-05-09', 'PAUSED', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task fifteen (Admin''s task)', 'some description for task fifteen', '2023-06-01', 'PAUSED', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task sixteen (Admin''s task)', 'some description for task sixteen', '2023-07-01', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task seventeen (Admin''s task)', 'some description for task seventeen', '2023-07-01', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task eighteen (Admin''s task)', 'some description for task eighteen', '2023-06-15', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task nineteen (Admin''s task)', 'some description for task nineteen', '2023-05-03', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task twenty (Admin''s task)', 'some description for task twenty', '2023-05-20', 'NEW', 1);
+insert into tasks (title, description, deadline, status, user_id) values ('task one (User''s task)', 'some description for task one', '2023-04-23', 'DONE', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task two (User''s task)', 'some description for task two', '2023-04-23', 'DONE', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task three (User''s task)', 'some description for task three', '2023-04-24', 'IN_PROGRESS', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task four (User''s task)', 'some description for task four', '2023-04-25', 'DONE', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task five (User''s task)', 'some description for task five', '2023-04-20', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task six (User''s task)', 'some description for task six', '2023-04-20', 'IN_PROGRESS', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task seven (User''s task)', 'some description for task seven', '2023-04-20', 'IN_PROGRESS', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task eight (User''s task)', 'some description for task eight', '2023-04-27', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task nine (User''s task)', 'some description for task nine', '2023-05-01', 'IN_PROGRESS', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task ten (User''s task)', 'some description for task ten', '2023-05-03', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task eleven (User''s task)', 'some description for task eleven', '2023-05-05', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task twelve (User''s task)', 'some description for task twelve', '2023-05-07', 'IN_PROGRESS', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task thirteen (User''s task)', 'some description for task thirteen', '2023-05-09', 'PAUSED', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task fourteen (User''s task)', 'some description for task fourteen', '2023-05-09', 'PAUSED', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task fifteen (User''s task)', 'some description for task fifteen', '2023-06-01', 'PAUSED', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task sixteen (User''s task)', 'some description for task sixteen', '2023-07-01', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task seventeen (User''s task)', 'some description for task seventeen', '2023-07-01', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task eighteen (User''s task)', 'some description for task eighteen', '2023-06-15', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task nineteen (User''s task)', 'some description for task nineteen', '2023-05-03', 'NEW', 2);
+insert into tasks (title, description, deadline, status, user_id) values ('task twenty (User''s task)', 'some description for task twenty', '2023-05-20', 'NEW', 2);
+

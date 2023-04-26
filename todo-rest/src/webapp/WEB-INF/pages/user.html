@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta id="root" name="viewport" content="width=device-width, initial-scale=1" about="@{/users.html}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <title>User</title>
+</head>
+<body>
+
+<nav class="navbar p-3 bg-dark text-white">
+    <nav class="nav-item">
+        <b sec:authentication="name"></b>
+        <span> with roles:</span>
+        <span sec:authorize="hasRole('ROLE_ADMIN')"> ADMIN</span>
+        <span sec:authorize="hasRole('ROLE_USER')"> USER</span>
+    </nav>
+    <nav class="navbar-nav text-right">
+        <a th:href="@{/logout}" style="color: #6c757d; text-decoration: none">Logout</a>
+    </nav>
+</nav>
+
+<div class="row" style="--bs-gutter-x: .0rem; height: 100vh;">
+    <div class="col-3" style="padding-right: .0em">
+        <div class="list-group list-group-light" id="list-tab" role="tablist">
+            <br>
+            <span sec:authorize="hasRole('ROLE_ADMIN')">
+            <a class="list-group-item list-group-item-action text-primary px-3 border-0" id="list-admin-list"
+               data-mdb-toggle="list" th:href="@{/admin}" role="tab" aria-controls="list-home">Admin Panel</a>
+            </span>
+            <a class="list-group-item list-group-item-action active px-3 border-0" id="list-home-list"
+               data-mdb-toggle="list" role="tab" aria-controls="list-home">Personal Account</a>
+        </div>
+    </div>
+    <div class="col-9 tab-content" id="nav-tabContent" style="background-color: whitesmoke; padding-left: 30px">
+        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list" style="padding-right:25px"><br>
+            <h1 style="text-align: left">Personal Account</h1>
+            <ul class="nav nav-tabs" id="selected_page">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tasks_table" th:attr="onclick=|activateContent(id, 'get_tasks')|">Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link container-fluid" id="new_task" th:attr="onclick=|activateContent(id, 'create_task')|">Create task</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link container-fluid" id="user_info" th:attr="onclick=|loadUserInfo()|">User information-page</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="user_page" style="background-color: white">
+                <div class="tab-pane user active" id="get_tasks">
+                    <nav class="border navbar p-2" style="background-color: rgba(0, 0, 0, 0.075)">
+                        <nav class="nav-item">
+                            <span class="nav-item" style="padding-left:10px">All tasks</span>
+                        </nav>
+                    </nav>
+                    <h1 id="empty_table_placeholder"></h1>
+                    <div class="container form-control-sm" style="padding-top: 20px; padding-left: 10px; padding-right: 10px" id="container_for_tasks">
+                        <select style="float: right; margin-left: 5px" id="limit" class="form-control-sm">
+                            <option id="select_1" th:value="1">1</option>
+                            <option id="select_3" th:value="3">3</option>
+                            <option id="select_5" th:value="5">5</option>
+                            <option id="select_10" th:value="10">10</option>
+                            <option id="select_20" th:value="20">20</option>
+                            <option id="select_all">ALL</option>
+                        </select>
+                        <label style="float: right; margin-right: 10px" htmlFor="limit">Tasks in a page: </label>
+                        <br>
+                        <table class="table table-striped border-top" id="table_all_tasks">
+                            <thead>
+                            <tr th:id="task_fields" style="border-color: transparent; border-style: inherit">
+                                <th th:id="id" scope="col">ID</th>
+                                <th th:id="task" scope="col">Task</th>
+                                <th th:id="status" scope="col">Status</th>
+                                <th th:id="deadline" scope="col">Deadline</th>
+                                <th scope="col">Edite</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody id="mainTable" style="border-color: transparent;border-top: transparent;border-style: solid;">
+                            </tbody>
+                        </table>
+                        <h5 id="count" style="float: right; margin-right: 20px"></h5>
+                        <div>
+                            <ul id="pagging-bar_for_tasks" class="pagination pagination-sm justify-content-center">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane user fade" id="create_task">
+                    <nav class="border navbar p-2 bg-light">
+                        <nav class="nav-item">
+                            <span class="nav-item" style="padding-left:10px">Creating new task</span>
+                        </nav>
+                    </nav>
+                    <div class="container-fluid" style="background-color: white">
+                        <div class="container-sm text-center align-content-center w-50" style="background-color: white">
+                            <form class="form" id="form_create_task">
+                                <br>
+                                <div class="form-group">
+                                    <label for="inputTaskNewTitle"><strong>Title</strong></label>
+                                    <input type="text" class="form-control" id="inputTaskNewTitle">
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputTaskNewDescription"><strong>Description</strong></label>
+                                    <textarea type="text" rows="10" class="form-control" id="inputTaskNewDescription">
+                                    </textarea>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputTaskNewStatus"><strong>Status</strong></label>
+                                    <select id="inputTaskNewStatus" class="form-control">
+                                        <option value="NEW" selected>NEW</option>
+                                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                                        <option value="PAUSED">PAUSED</option>
+                                        <option value="DONE">DONE</option>
+                                    </select>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputTaskNewDeadline"><strong>Deadline</strong></label>
+                                    <input type="date" class="form-control" id="inputTaskNewDeadline"/>
+                                </div><br>
+                                <div><div id="liveAlertPlaceholder"></div>
+                                    <button id="button_create_task" type="button" th:attr="onclick=|createTask()|" class="btn btn-success  align-content-center">Add task</button>
+                                </div>
+                                <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane user fade" id="get_user">
+                    <nav class="border navbar p-2" style="background-color: rgba(0, 0, 0, 0.075)">
+                        <nav class="nav-item">
+                            <span class="nav-item" style="padding-left:10px">User information-page</span>
+                        </nav>
+                    </nav>
+                    <div class="container form-control-sm" style="padding-top: 20px; padding-left: 10px; padding-right: 10px">
+                        <table class="table table-striped border-top">
+                            <thead>
+                            <tr th:id="user_fields" style="border-color: lightgray; border-style: inherit">
+                                <th th:id="id" scope="col">ID</th>
+                                <th th:id="firstName" scope="col">First name</th>
+                                <th th:id="lastName" scope="col">Last name</th>
+                                <th th:id="age" scope="col">Age</th>
+                                <th th:id="email" scope="col">Email</th>
+                                <th th:id="roleNames" scope="col">Role</th>
+                            </tr>
+                            </thead>
+                            <tbody id="mainUserTable"  style="border-color: transparent;border-top: transparent;border-style: solid;">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit task</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="edit_task_info">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">Close</span>
+                </button>
+                <button type="button" class="btn btn-info" id="modal_edit_button" data-dismiss="modal" aria-label="Edit">
+                    <span aria-hidden="true">Edit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete_task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete task</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="delete_task_info">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">Close</span>
+                </button>
+                <button type="button" class="btn btn-danger" id="modal_delete_button" data-dismiss="modal" aria-label="Delete">
+                    <span aria-hidden="true">Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    loadTasks("http://localhost:8080/api/user/tasks");
+
+    $(function(){
+        $('#limit').on('change', function () {
+            loadTasks("http://localhost:8080/api/user/tasks?pageSize=" + $(this).val())
+        });
+    });
+
+    $(document).on('click', '.page-link', function() {
+        loadTasks("http://localhost:8080/api/user/tasks?pageSize=" + document.getElementById("limit").value + "&pageNumber=" + $(this).val())
+    });
+
+    async function loadTasks(url) {
+        await fetch(url, {})
+            .then(
+                response => {
+                    response.json().then(
+                        page => {
+                            let totalCount = page.totalElements
+                            let pageSize = page.size
+                            let pageCount = page.totalPages
+                            let pageNumber = page.number
+                            let temp = "";
+
+                            if (totalCount === 0) {
+                                document.getElementById("container_for_tasks").hidden = true;
+                                document.getElementById("empty_table_placeholder").hidden = false;
+                                document.getElementById("empty_table_placeholder").innerText = "No one task found";
+                            } else {
+                                document.getElementById("container_for_tasks").hidden = false;
+                                document.getElementById("empty_table_placeholder").hidden = true;
+
+                                page.content.forEach((task) => {
+                                    temp += `<tr id="${task.id}">`;
+                                    temp += `<td id="id_${task.id}">${task.id}</td>`
+                                    temp += `<td id="title_${task.id}">${task.title}</td>`
+                                    temp += `<td id="status_${task.id}">${task.status}</td>`
+                                    temp += `<td id="deadline_${task.id}">${task.deadline}</td>`
+                                    temp += `<td>
+                                     <button id="edit_${task.id}" type="button" class="btn btn-info btn-sm edit-button modal-open" style="color: whitesmoke">Edit
+                                     </button>
+                                 </td>`
+                                    temp += `<td>
+                                     <button id="delete_${task.id}" type="button" class="btn btn-danger btn-sm delete-button modal-open">Delete
+                                     </button>
+                                 </td>`
+                                    temp += "</tr>"
+                                });
+                                document.getElementById("mainTable").innerHTML = temp;
+                                let select_all = document.getElementById("select_all")
+                                select_all.value = totalCount
+                                select_all.selected = (totalCount === pageSize);
+                                if (document.getElementById("select_" + totalCount) != null) document.getElementById("select_" + totalCount).remove()
+                                let limit = document.getElementById("limit")
+                                let options = limit.getElementsByTagName('option')
+                                if (select_all.selected === false) {
+                                    for (let i = 0; i < options.length - 1; i++) {
+                                        if (totalCount < Number(options[i].value)) {
+                                            options[i].remove()
+                                            continue
+                                        }
+                                        options[i].selected = (Number(options[i].value) === pageSize);
+                                    }
+                                }
+                                document.getElementById("count").innerText = "Tasks found: " + totalCount
+                                let pagination = document.getElementById("pagging-bar_for_tasks");
+                                pagination.value = pageCount - 1
+                                pagination.current_page = pageNumber
+                                if (totalCount <= pageSize) {
+                                    pagination.hidden = true;
+                                } else {
+                                    pagination.hidden = false;
+                                    pagination.innerHTML = "";
+                                    for (let i = 0; i < pageCount; i++) {
+                                        let page = document.createElement("li");
+                                        page.id = "page_" + i;
+                                        page.className = (i === pageNumber ? "page-item disabled" : "page-item");
+                                        let page_link = document.createElement("a");
+                                        page_link.id = "page_link_" + i;
+                                        page_link.value = i;
+                                        page_link.className = "page-link";
+                                        page_link.innerText = i + 1;
+                                        page.appendChild(page_link);
+                                        pagination.appendChild(page);
+                                    }
+                                }
+                            }
+                        }
+                    )
+                });
+    }
+
+    $(document).on('click', '.edit-button', function() {
+        let id = $(this).attr('id').replace("edit_", "")
+
+        fetch(`http://localhost:8080/api/user/tasks/${id}`, {
+            method: 'GET'
+        }).then(response => response.json())
+            .then(task => {
+                document.getElementById("edit_task_info").innerHTML =
+                    `<div class="container-sm text-center align-content-center w-50" style="background-color: white">
+                 <form class="form">
+                                <div class="form-group">
+                                    <label><strong>&nbsp; ID &nbsp;</strong></label>
+                                    <input placeholder=${id} disabled>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="input_title_${id}"><strong>Title</strong></label>
+                                    <input id="input_title_${id}" value=${task.title} placeholder=${task.title} type=\"text\" minLength=\"1\" maxlength=\"250\">
+                                </div></br>
+                                <div class="form-group">
+                                    <label for="input_description_${id}"><strong>Description</strong></label>
+                                    <textarea id="input_description_${id}" type=\"text\" minLength=\"1\" maxlength=\"1000\">
+                                    </textarea>
+                                </div></br>
+                                <div class="form-group">
+                                    <label for="select_status_${id}"><strong>Status</strong></label>
+                                    <select id="select_status_${id}" class="form-control">
+                                        <option id="NEW_${id}" value="NEW">NEW</option>
+                                        <option id="IN_PROGRESS_${id}" value="IN_PROGRESS">IN_PROGRESS</option>
+                                        <option id="PAUSED_${id}" value="PAUSED">PAUSED</option>
+                                        <option id="DONE_${id}" value="DONE">DONE</option>
+                                    </select>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="input_deadline_${id}"><strong>Deadline</strong></label>
+                                        <input type="date" class="form-control" id="input_deadline_${id}"/>
+                                </div><br>
+                                </form></div>`;
+
+                document.getElementById("select_status_" + id).value = task.status;
+                document.getElementById("input_description_" + id).value = task.description;
+                document.getElementById("input_deadline_" + id).defaultValue = task.deadline;
+
+            })
+
+        let edit_button = document.getElementById('modal_edit_button');
+
+        edit_button.onclick = function() {
+            saveUpdatedTask(id);
+        }
+
+        jQuery("#edit_task").modal();
+    });
+
+    async function saveUpdatedTask(id) {
+        let body = {};
+        body.title = document.getElementById("input_title_" + id).value;
+        body.description = document.getElementById("input_description_" + id).value;
+        let status = document.getElementById("select_status_" + id);
+        body.status = status.options[status.selectedIndex].value;
+        body.deadline = document.getElementById("input_deadline_" + id).value;
+
+        fetch(`http://localhost:8080/api/user/tasks/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(body)
+        }).then(response => response.json())
+            .then(task => {
+                let temp = "";
+
+                temp += `<td id="id_${task.id}">${task.id}</td>`
+                temp += `<td id="title_${task.id}">${task.title}</td>`
+                temp += `<td id="status_${task.id}">${task.status}</td>`
+                temp += `<td id="deadline_${task.id}">${task.deadline}</td>`
+                temp += `<td>
+                                     <button id="edit_${task.id}" type="button" class="btn btn-info btn-sm edit-button modal-open" style="color: whitesmoke">Edit
+                                     </button>
+                                 </td>`
+                temp += `<td>
+                                     <button id="delete_${task.id}" type="button" class="btn btn-danger btn-sm delete-button modal-open">Delete
+                                     </button>
+                                 </td>`
+                temp += "</tr>"
+
+                $(`#${id}`).html(temp)
+            })
+    }
+
+    $(document).on('click', '.delete-button', function() {
+        let id = $(this).attr('id').replace("delete_", "")
+
+        let title = document.getElementById("title_" + id);
+        let status = document.getElementById("status_" + id);
+        let deadline = document.getElementById("deadline_" + id);
+
+        document.getElementById("delete_task_info").innerHTML =
+            `<div class="container-sm text-center align-content-center w-50" style="background-color: white">
+                 <form class="form">
+                                <div class="form">
+                                    <label><strong>&nbsp; ID &nbsp;</strong></label>
+                                    <input placeholder=${id} disabled>
+                                </div></br>
+                                <div class="form-group">
+                                    <label><strong>Title</strong></label>
+                                    <input placeholder=${title.textContent} disabled>
+                                </div></br>
+                                <div class="form-group">
+                                    <label><strong>Status</strong></label>
+                                    <input placeholder=${status.textContent}  disabled>
+                                </div></br>
+                                <div class="form-group">
+                                    <label><strong>Deadline</strong></label>
+                                    <input placeholder=${deadline.textContent}  disabled>
+                                </div></br>
+                 </form>
+             </div>`;
+
+        let delete_button = document.getElementById('modal_delete_button');
+
+        delete_button.onclick = function() {
+            deleteTask(id);
+        }
+
+        jQuery("#delete_task").modal();
+    });
+
+    async function deleteTask(id) {
+        let response = await fetch (`http://localhost:8080/api/user/tasks/${id}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            document.getElementById(id).remove();
+            loadTasks("http://localhost:8080/api/user/tasks?pageSize=" + document.getElementById("limit").value + "&pageNumber=" + document.getElementById("pagging-bar_for_tasks").current_page);
+        }
+    }
+
+    function activateContent(elementId, tabId){
+        let elements = document.getElementsByClassName("nav-link");
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].className = elements[i].className.replace("active", "");
+        }
+        document.getElementById(elementId).className = document.getElementById(elementId).className.concat(" active");
+
+        let contents = document.getElementsByClassName("tab-pane user");
+        for (let i = 0; i < contents.length; i++) {
+            contents[i].className = contents[i].className.replace("active", "fade");
+        }
+        document.getElementById(tabId).className = document.getElementById(tabId).className.replace("fade", "active");
+    }
+
+    async function createTask() {
+        let body = {};
+        body.title = document.getElementById("inputTaskNewTitle").value;
+        body.description = document.getElementById("inputTaskNewDescription").value;
+        let status = document.getElementById("inputTaskNewStatus");
+        body.status = status.options[status.selectedIndex].value;
+        body.deadline = document.getElementById("inputTaskNewDeadline").value;
+
+        await fetch (`http://localhost:8080/api/user/tasks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(body)
+        }).then(response => {
+            if (response.status === 200) {
+                appendAlert('Task successfully saved!', 'success');
+                loadTasks("http://localhost:8080/api/user/tasks?pageSize=" + document.getElementById("limit").value)
+            }
+        })
+            .then(document.getElementById("form_create_task").reset())
+    }
+
+    async function loadUserInfo() {
+        await fetch("http://localhost:8080/api/user", {})
+            .then(
+                response => {
+                    response.json().then(
+                        user => {
+                            let temp = "";
+
+                            temp += `<tr id="${user.id}">`;
+                            temp += `<td id="id_${user.id}">${user.id}</td>`
+                            temp += `<td id="name_${user.id}">${user.firstName}</td>`
+                            temp += `<td id="last_name_${user.id}">${user.lastName}</td>`
+                            temp += `<td id="age_${user.id}">${user.age}</td>`
+                            temp += `<td id="email_${user.id}">${user.email}</td>`
+                            temp += `<td id="roles_${user.id}">${user.roles}</td>`
+                            temp += "</tr>"
+
+                            document.getElementById("mainUserTable").innerHTML = temp;
+                            activateContent('user_info', 'get_user')
+                        }
+                    )
+                });
+    }
+
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    const appendAlert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.append(wrapper)
+    }
+</script>
+</html>
