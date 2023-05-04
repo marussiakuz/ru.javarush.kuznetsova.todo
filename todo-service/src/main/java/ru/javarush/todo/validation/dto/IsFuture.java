@@ -1,6 +1,7 @@
 package ru.javarush.todo.validation.dto;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -18,4 +19,9 @@ public @interface IsFuture {
     String message() default "The date must be no later than the current date";
 
     boolean isNullable() default false;
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
 }

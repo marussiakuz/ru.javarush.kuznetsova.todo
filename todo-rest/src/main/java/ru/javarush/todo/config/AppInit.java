@@ -7,7 +7,7 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{
-                PasswordEncoderConfig.class, WebSecurityConfig.class, AppConfig.class
+                PasswordEncoderConfig.class, WebSecurityConfig.class, AppConfig.class, ValidationConfig.class
         };
     }
 

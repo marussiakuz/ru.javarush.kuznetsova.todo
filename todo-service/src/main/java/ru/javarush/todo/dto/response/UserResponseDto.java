@@ -1,9 +1,9 @@
 package ru.javarush.todo.dto.response;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
 public class UserResponseDto {

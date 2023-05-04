@@ -12,11 +12,14 @@ import ru.javarush.todo.dto.response.TaskFullResponseDto;
 import ru.javarush.todo.dto.response.TaskResponseDto;
 import ru.javarush.todo.exception.TaskNotFoundException;
 import ru.javarush.todo.exception.UserNotFoundException;
+import ru.javarush.todo.model.Status;
 import ru.javarush.todo.model.Task;
 import ru.javarush.todo.model.User;
 import ru.javarush.todo.repository.TaskRepository;
 import ru.javarush.todo.repository.UserRepository;
 import ru.javarush.todo.service.TaskService;
+
+import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 @Service
@@ -45,6 +48,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto create(long userId, TaskRequestDto taskRequestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id=%s doesn't exist".formatted(userId)));
+        if (isNull(taskRequestDto.getStatus())) taskRequestDto.setStatus(Status.NEW);
         Task task = taskMapper.toEntity(taskRequestDto);
         task.setUser(user);
         return taskMapper.toDto(taskRepository.save(task));

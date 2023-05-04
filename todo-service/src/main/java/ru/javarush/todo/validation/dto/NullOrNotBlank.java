@@ -1,6 +1,7 @@
 package ru.javarush.todo.validation.dto;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -17,5 +18,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface NullOrNotBlank {
 
     String message() default "Value must not be blank";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 
 }

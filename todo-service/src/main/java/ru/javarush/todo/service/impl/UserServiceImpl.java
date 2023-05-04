@@ -16,6 +16,8 @@ import ru.javarush.todo.service.UserService;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public UserResponseDto create(UserRequestDto user) {
+        if (isNull(user.getRoleNames())) user.setRoleNames("USER");
         return userMapper.toDto(userRepository.save(userMapper.toEntity(user)));
     }
 

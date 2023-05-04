@@ -1,7 +1,11 @@
 package ru.javarush.todo.controller.admin;
 
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.javarush.todo.dto.OnCreate;
+import ru.javarush.todo.dto.OnUpdate;
 import ru.javarush.todo.dto.request.UserRequestDto;
 import ru.javarush.todo.dto.response.UserResponseDto;
 import ru.javarush.todo.facade.admin.AdminUserServiceFacade;
@@ -21,12 +25,13 @@ public class AdminUserController {
     }
 
     @PostMapping
-    public UserResponseDto create(@RequestBody UserRequestDto user) {
+    public UserResponseDto create(@RequestBody @Validated({OnCreate.class, Default.class}) UserRequestDto user) {
         return adminUserServiceFacade.create(user);
     }
 
     @PatchMapping("/user/{id}")
-    public UserResponseDto update(@PathVariable long id, @RequestBody UserRequestDto user) {
+    public UserResponseDto update(@PathVariable("id") long id,
+                                  @RequestBody @Validated({OnUpdate.class, Default.class}) UserRequestDto user) {
         return adminUserServiceFacade.update(id, user);
     }
 

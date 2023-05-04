@@ -28,7 +28,7 @@ public class PasswordValidator implements ConstraintValidator<IsPasswordValid, S
     public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext) {
         if (isNull(password)) return isNullable;
 
-        return (!shouldMatchThePattern || Pattern.matches(pattern, password)) && pattern.length() >= minLength
-                && pattern.length() <= maxLength;
+        return (!shouldMatchThePattern || Pattern.matches(pattern, password)) && (password.length() >= minLength
+                && password.length() <= maxLength);
     }
 }

@@ -1,14 +1,14 @@
 package ru.javarush.todo.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.*;
 import java.util.Objects;
 
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Getter @Setter
 @Entity
